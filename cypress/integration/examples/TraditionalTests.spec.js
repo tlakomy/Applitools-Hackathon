@@ -1,6 +1,7 @@
 /// <reference types="Cypress" />
 
 import { selectors as loginSelectors } from '../../selectors/login';
+import { selectors as expensesSelectors } from '../../selectors/expenses';
 
 const {
     loginLogo,
@@ -14,6 +15,16 @@ const {
     loginSocialMediaButtons,
     loginAlertWarning
 } = loginSelectors;
+
+const {
+    amountSortButton,
+    amountTableCell,
+    flashSaleGifOne,
+    flashSaleGifTwo
+} = expensesSelectors;
+
+const USERNAME = 'admin';
+const PASSWORD = 'SuperSecretPassw0rd';
 
 context('Applitools Hackathon - Login Page', () => {
     beforeEach(() => {
@@ -73,7 +84,7 @@ context('Applitools Hackathon - Login Page', () => {
         });
 
         it('Should show an error if users tries to log in without providing a password', () => {
-            cy.get(loginUsernameInput).type('admin');
+            cy.get(loginUsernameInput).type(USERNAME);
             cy.get(loginButton).click();
 
             cy.get(loginAlertWarning).should(
@@ -83,7 +94,7 @@ context('Applitools Hackathon - Login Page', () => {
         });
 
         it('Should show an error if users tries to log in without providing a username', () => {
-            cy.get(loginPasswordInput).type('superSecretPassw0rd');
+            cy.get(loginPasswordInput).type(PASSWORD);
             cy.get(loginButton).click();
 
             cy.get(loginAlertWarning).should(
@@ -93,8 +104,8 @@ context('Applitools Hackathon - Login Page', () => {
         });
 
         it('Should allow the user to log in after providing username and password', () => {
-            cy.get(loginUsernameInput).type('admin');
-            cy.get(loginPasswordInput).type('superSecretPassw0rd');
+            cy.get(loginUsernameInput).type(USERNAME);
+            cy.get(loginPasswordInput).type(PASSWORD);
             cy.get(loginButton).click();
 
             cy.url().should(
@@ -150,8 +161,8 @@ context('Applitools Hackathon - Table Sort', () => {
     beforeEach(() => {
         // Login to the service
         cy.visit('https://demo.applitools.com/hackathon.html');
-        cy.get(loginUsernameInput).type('admin');
-        cy.get(loginPasswordInput).type('superSecretPassw0rd');
+        cy.get(loginUsernameInput).type(USERNAME);
+        cy.get(loginPasswordInput).type(PASSWORD);
         cy.get(loginButton).click();
     });
 
@@ -161,14 +172,43 @@ context('Applitools Hackathon - Table Sort', () => {
             .sort((a, b) => a - b);
 
         validateAmounts();
-        cy.get('#amount').click();
-
-        // Checking if sorting the values in the UI actually works
-        cy.get('tr td:last-child').each((amount, index) =>
-            expect(toNumber(amount[0].innerText)).to.equal(sortedAmounts[index])
-        );
+        cy.get(amountSortButton).click();
 
         // Checking whether sorting hasn't changed values in each column
         validateAmounts();
+
+        // Checking if sorting the values in the UI actually works
+        cy.get(amountTableCell).each((amount, index) =>
+            expect(toNumber(amount[0].innerText)).to.equal(sortedAmounts[index])
+        );
+    });
+});
+
+context('Applitools Hackathon - Canvas Chart', () => {
+    // I'm nearly 100% confident that this kind of test is impossible to write with cypress :(
+    // At the time of writing this I'm definitely looking forward to checking out Applitools Eyes
+    // to see how can I automate testing a chart like this
+});
+
+context('Applitools Hackathon - Dynamic Content', () => {
+    beforeEach(() => {
+        // Login to the service
+        cy.visit('https://demo.applitools.com/hackathon.html?showAd=true');
+        cy.get(loginUsernameInput).type(USERNAME);
+        cy.get(loginPasswordInput).type(PASSWORD);
+        cy.get(loginButton).click();
+    });
+
+    it('shows two Flash Sale GIFs', () => {
+        // With cypress I'm only able to verify whether two GIFs are displayed
+        // I won't be able to tell anything about their actual content - it might be 'Flash Sale' or a cute kitten, you never know
+        // Personally I wouldn't fail the test if a cute kitten appeared on the site but I assume that the PM requested the 'Flash Sale' GIFs
+
+        cy.get(flashSaleGifOne).should('have.attr', 'src', 'img/flashSale.gif');
+        cy.get(flashSaleGifTwo).should(
+            'have.attr',
+            'src',
+            'img/flashSale2.gif'
+        );
     });
 });
