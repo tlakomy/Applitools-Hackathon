@@ -15,7 +15,7 @@ const {
     loginAlertWarning
 } = loginSelectors;
 
-context('Applitools Hackathon - traditional tests V1', () => {
+context('Applitools Hackathon - Login Page', () => {
     beforeEach(() => {
         cy.visit('https://demo.applitools.com/hackathon.html');
     });
@@ -102,5 +102,57 @@ context('Applitools Hackathon - traditional tests V1', () => {
                 'https://demo.applitools.com/hackathonApp.html'
             );
         });
+    });
+});
+
+context('Applitools Hackathon - Table Sort', () => {
+    beforeEach(() => {
+        cy.visit('https://demo.applitools.com/hackathon.html');
+        cy.get(loginUsernameInput).type('admin');
+        cy.get(loginPasswordInput).type('superSecretPassw0rd');
+        cy.get(loginButton).click();
+    });
+
+    function validateAmounts() {
+        const transactions = [
+            {
+                description: 'MailChimp Services',
+                amount: '- 320.00 USD'
+            },
+            {
+                description: 'Ebay Marketplace',
+                amount: '- 244.00 USD'
+            },
+            {
+                description: 'Shopify product',
+                amount: '+ 17.99 USD'
+            },
+            {
+                description: 'Templates Inc',
+                amount: '+ 340.00 USD'
+            },
+            {
+                description: 'Stripe Payment Processing',
+                amount: '+ 952.23 USD'
+            },
+            {
+                description: 'Starbucks coffee',
+                amount: '+ 1,250.00 USD'
+            }
+        ];
+
+        transactions.forEach(({ description, amount }) =>
+            cy
+                .contains(description)
+                .closest('tr')
+                .within(() =>
+                    cy.get('td:last-child').should('contain.text', amount)
+                )
+        );
+    }
+
+    it.only('Should allow the user to sort values in ascending order with data intact', () => {
+        validateAmounts();
+        cy.get('#amount').click();
     });
 });
