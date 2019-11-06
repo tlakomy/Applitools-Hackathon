@@ -1,0 +1,22 @@
+{
+  "name": "applitools-hackathon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tlakomy/Applitools-Hackathon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tlakomy/Applitools-Hackathon/issues"
+  },
+  "homepage": "https://github.com/tlakomy/Applitools-Hackathon#readme",
+  "devDependencies": {
+    "cypress": "^3.6.0"
+  }
+}
