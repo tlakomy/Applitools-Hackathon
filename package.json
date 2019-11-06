@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/tlakomy/Applitools-Hackathon#readme",
   "devDependencies": {
+    "@applitools/eyes-cypress": "^3.8.18",
     "cypress": "^3.6.0"
   }
 }
