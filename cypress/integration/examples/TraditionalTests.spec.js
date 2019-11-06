@@ -106,41 +106,38 @@ context('Applitools Hackathon - Login Page', () => {
 });
 
 context('Applitools Hackathon - Table Sort', () => {
-    beforeEach(() => {
-        cy.visit('https://demo.applitools.com/hackathon.html');
-        cy.get(loginUsernameInput).type('admin');
-        cy.get(loginPasswordInput).type('superSecretPassw0rd');
-        cy.get(loginButton).click();
-    });
+    const transactions = [
+        {
+            description: 'Starbucks coffee',
+            amount: '+ 1,250.00 USD'
+        },
+        {
+            description: 'Stripe Payment Processing',
+            amount: '+ 952.23 USD'
+        },
+        {
+            description: 'MailChimp Services',
+            amount: '- 320.00 USD'
+        },
+        {
+            description: 'Shopify product',
+            amount: '+ 17.99 USD'
+        },
+        {
+            description: 'Ebay Marketplace',
+            amount: '- 244.00 USD'
+        },
+        {
+            description: 'Templates Inc',
+            amount: '+ 340.00 USD'
+        }
+    ];
 
-    function validateAmounts() {
-        const transactions = [
-            {
-                description: 'MailChimp Services',
-                amount: '- 320.00 USD'
-            },
-            {
-                description: 'Ebay Marketplace',
-                amount: '- 244.00 USD'
-            },
-            {
-                description: 'Shopify product',
-                amount: '+ 17.99 USD'
-            },
-            {
-                description: 'Templates Inc',
-                amount: '+ 340.00 USD'
-            },
-            {
-                description: 'Stripe Payment Processing',
-                amount: '+ 952.23 USD'
-            },
-            {
-                description: 'Starbucks coffee',
-                amount: '+ 1,250.00 USD'
-            }
-        ];
+    const toNumber = amount =>
+        parseFloat(amount.replace(/(\s|,|\.)/g, '')) / 100;
 
+    const validateAmounts = () =>
+        // We want to check whether the values in the UI are the same as in the transactions array defined above
         transactions.forEach(({ description, amount }) =>
             cy
                 .contains(description)
@@ -149,10 +146,29 @@ context('Applitools Hackathon - Table Sort', () => {
                     cy.get('td:last-child').should('contain.text', amount)
                 )
         );
-    }
 
-    it.only('Should allow the user to sort values in ascending order with data intact', () => {
+    beforeEach(() => {
+        // Login to the service
+        cy.visit('https://demo.applitools.com/hackathon.html');
+        cy.get(loginUsernameInput).type('admin');
+        cy.get(loginPasswordInput).type('superSecretPassw0rd');
+        cy.get(loginButton).click();
+    });
+
+    it('Should allow the user to sort values in ascending/descending order with data intact', () => {
+        const sortedAmounts = transactions
+            .map(({ amount }) => toNumber(amount))
+            .sort((a, b) => a - b);
+
         validateAmounts();
         cy.get('#amount').click();
+
+        // Checking if sorting the values in the UI actually works
+        cy.get('tr td:last-child').each((amount, index) =>
+            expect(toNumber(amount[0].innerText)).to.equal(sortedAmounts[index])
+        );
+
+        // Checking whether sorting hasn't changed values in each column
+        validateAmounts();
     });
 });
