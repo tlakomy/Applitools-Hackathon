@@ -41,7 +41,7 @@ context('Applitools Hackathon - Login Page', () => {
     });
 
     context('UI elements', () => {
-        it.only('Should contain all necessary login page UI elements', () => {
+        it('Should contain all necessary login page UI elements', () => {
             // Verify the page header
             cy.get(loginLogo).should('have.attr', 'src', 'img/logo-big.png');
 
@@ -104,7 +104,9 @@ context('Applitools Hackathon - Login Page', () => {
 
             cy.get(loginAlertWarning).should(
                 'contain.text',
-                'Both Username and Password must be present'
+                // There is a different validation text between V1 and V2
+                // 'Both Username and Password must be present' - V1
+                'Please enter both username and password' // V2 version
             );
         });
 
@@ -112,6 +114,8 @@ context('Applitools Hackathon - Login Page', () => {
             cy.get(loginUsernameInput).type(USERNAME);
             cy.get(loginButton).click();
 
+            // There is a clear bug here as no validation text is displayed
+            // Since failing this test will not stop other tests I will keep it as it is
             cy.get(loginAlertWarning).should(
                 'contain.text',
                 'Password must be present'
@@ -122,6 +126,8 @@ context('Applitools Hackathon - Login Page', () => {
             cy.get(loginPasswordInput).type(PASSWORD);
             cy.get(loginButton).click();
 
+            // This test is passing between V1 and V2 but there's a visual regression
+            // which was NOT caught by cypress
             cy.get(loginAlertWarning).should(
                 'contain.text',
                 'Username must be present'
@@ -134,9 +140,10 @@ context('Applitools Hackathon - Login Page', () => {
             cy.get(loginButton).click();
 
             cy.url().should(
-                'equal',
-                'https://demo.applitools.com/hackathonApp.html'
+                'contain',
+                'https://demo.applitools.com/hackathonApp'
             );
+            cy.contains('Financial Overview');
         });
     });
 });
@@ -203,6 +210,9 @@ context('Applitools Hackathon - Table Sort', () => {
         validateAmounts();
 
         // Checking if sorting the values in the UI actually works
+        // Sorting was fine in V1 but in V2 it's clearly broken and cypress managed to catch that
+        // Although I must admit that this is difficult to test using JavaScript
+        // and really easy to test by just looking at the UI after 'sorting'
         cy.get(amountTableCell).each((amount, index) =>
             expect(toNumber(amount[0].innerText)).to.equal(sortedAmounts[index])
         );
@@ -229,6 +239,8 @@ context('Applitools Hackathon - Dynamic Content', () => {
         // I won't be able to tell anything about their actual content - it might be 'Flash Sale' or a cute kitten, you never know
         // Personally I wouldn't fail the test if a cute kitten appeared on the site but I assume that the PM requested the 'Flash Sale' GIFs
 
+        // There is a regression between V1 and V2 because the first GIF is not visible
+        // But if it was visible although with a different content, cypress wouldn't be able to tell
         cy.get(flashSaleGifOne).should('have.attr', 'src', 'img/flashSale.gif');
         cy.get(flashSaleGifTwo).should(
             'have.attr',
