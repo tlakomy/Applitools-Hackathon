@@ -7,7 +7,7 @@
 - V2 has a 'Pwd' label next to the password field, this is most likely a bug
 - V2 has a 'ABC$*1@' placeholder instead of 'Enter your password' in V2. V1 version was much more user friendly
 - LinkedIn button is missing in V2
-- No validation text is displayed when user tries to login providing only username and no password
+- No validation text is displayed when user tries to login providing only username and no password (it's actually present in the DOM but it's not shown to the user)
 - Sorting the table by amount **does not work** in V2, table rows are not sorted properly
 - Only one Flash Sale GIF is displayed in V2 and its different than the one in V1
 

@@ -34,6 +34,7 @@ const HACKATHON_APP_URL = 'https://demo.applitools.com/hackathonV2.html';
 // I'm going to implement all tests to pass and comment wherever applicable
 // that there was a regression between V1 and V2
 // (Even though in real-life scenario those tests should fail and I'd create JIRA tickets to fix those issues)
+// All issues that were detected by those tests are listed in README
 
 context('Applitools Hackathon - Login Page', () => {
     beforeEach(() => {
