@@ -35,6 +35,6 @@ The most impressive part for me were sorting the list and canvas exercises.
 
 Testing the sort functionality with cypress takes quite some time because of all the logic that is necessary to implement to compare the values before/after sorting etc. It's something that someone with limited JS skills might not be able to handle. With Eyes, I was simply able to see for myself that sorting is broken and report it as bug.
 
-Canvas was especially interesting because (to the best of my knowledge), it's really freaking hard to test this kind of UI with cypress. With Applitools Eyes I've actually managed to find a bug between V1 and V2 which I **totall** missed with my own eyes.
+Canvas was especially interesting because (to the best of my knowledge), it's really freaking hard to test this kind of UI with cypress. With Applitools Eyes I've actually managed to find a bug between V1 and V2 which I **totally** missed with my own eyes.
 
 I'm going to include Applitools Eyes in my future conference talks about testing, great stuff!
