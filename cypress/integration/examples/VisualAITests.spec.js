@@ -111,9 +111,11 @@ context("Canvas Chart", () => {
     visitAndLogin();
     cy.contains("Compare Expenses").click();
     openEyes(this.test.fullTitle());
+    cy.wait(3000);
     cy.eyesCheckWindow("Canvas Chart - 2017-2018");
 
     cy.contains("Show data for next year").click();
+    cy.wait(3000);
     cy.eyesCheckWindow("Canvas Chart - including 2019");
     cy.eyesClose();
     // TBH it's not fair how easy it is to test this with Applitools, I'm really impressed!
