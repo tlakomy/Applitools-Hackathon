@@ -1,25 +1,9 @@
 import { selectors as loginSelectors } from "../../selectors/login";
 import { selectors as expensesSelectors } from "../../selectors/expenses";
 
-const {
-  loginLogo,
-  loginHeader,
-  loginUsernameIcon,
-  loginPasswordIcon,
-  loginUsernameInput,
-  loginPasswordInput,
-  loginButton,
-  loginRememberMeLabel,
-  loginSocialMediaButtons,
-  loginAlertWarning
-} = loginSelectors;
+const { loginUsernameInput, loginPasswordInput, loginButton } = loginSelectors;
 
-const {
-  amountSortButton,
-  amountTableCell,
-  flashSaleGifOne,
-  flashSaleGifTwo
-} = expensesSelectors;
+const { amountSortButton } = expensesSelectors;
 
 const USERNAME = "admin";
 const PASSWORD = "SuperSecretPassw0rd";
